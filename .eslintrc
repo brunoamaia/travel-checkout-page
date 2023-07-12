@@ -1,0 +1,32 @@
+{
+	"root": true,
+	"env": { "browser": true, "es2020": true },
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:@typescript-eslint/recommended-requiring-type-checking",
+		"plugin:react-hooks/recommended"
+	],
+	 "parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module",
+		"project": true
+	},
+	"plugins": ["react-refresh", "@typescript-eslint"],
+	"rules": {
+		"react-refresh/only-export-components": [
+			"warn",
+			{ "allowConstantExport": true }
+		],
+		// "@typescript-eslint/no-non-null-assertion": "off",
+		
+		"indent": ["error", "tab"],										// Usar tab para indent
+		"linebreak-style": ["error", "unix"],							// arquivo estilo unix
+		"quotes": ["error", "single"],									// aspas simples
+		"semi": ["error", "always"],									// Utilizar ponto e vírgula
+		"no-multi-spaces": "error",										// Não permitir espaços duplicados
+		"eol-last": 1,													// Adicionar x linhas no final do arquivo
+		"no-multiple-empty-lines": ["error", {"max": 1, "maxEOF": 0}]	// Não permitir linhas vazias
+	}
+}
