@@ -8,7 +8,7 @@ const Router = () => {
 		<BrowserRouter>
 			<Routes>
 				<Route path='/' element={<Home />} />
-				<Route path='/edit/categories' element={<Checkout />} />
+				<Route path='/checkout' element={<Checkout />} />
 				<Route path='*' element={<NoMatch />} />
 			</Routes>
 		</BrowserRouter>

@@ -16,3 +16,7 @@ Para executar o projeto execute:
 npm dev
 yarn dev
 ```
+
+Ao executar no seu próprio ambiente, o projeto ficará na porta:
+
+```http://localhost:5173```
