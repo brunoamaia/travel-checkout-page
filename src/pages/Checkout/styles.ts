@@ -15,6 +15,15 @@ export const CheckoutContainer = styled.div`
 		max-width: 1000px;
 	}
 
+	h3 {
+		font-size: 1.4em;
+	}
+
+	h4 {
+		font-size: 1.2em;
+		margin-left: 5px;
+	}
+
 	button:disabled {
 		cursor: not-allowed;
 		background-color: #666;
@@ -28,7 +37,7 @@ export const CheckoutContainer = styled.div`
 		margin: 5px 0;
 
 		label {
-			min-width: 70px;
+			min-width: 80px;
 			text-align: end;
 			padding: 0 2px;
 		}
@@ -50,6 +59,14 @@ export const PassengersContainer = styled.div`
 `;
 
 export const ResumeContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
 	width: 40%;
 	border: 1px solid #12a;
+
+	.validate-form {
+		margin-top: 30px;
+	}
 `;

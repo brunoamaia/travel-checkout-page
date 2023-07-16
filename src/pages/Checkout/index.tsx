@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { CheckoutContainer, PassengersContainer, ResumeContainer } from './styles';
 import AdultDataInput from '../../components/Form/AdultDataInput';
 import TripDataInput from '../../components/Form/TripDataInput';
-import addPeopleIcon from '/user-plus.svg';
-import removePeopleIcon from '/user-minus.svg';
+import PassengerControl from '../../components/Form/PassengerControl';
+import { CheckoutContainer, PassengersContainer, ResumeContainer } from './styles';
 
 interface PeopleFormData {
 	email: string;
@@ -22,10 +21,6 @@ interface TripFormData {
 interface updatePeopleData {
 	data: PeopleFormData
 	index: number
-}
-
-interface PeopleCounts {
-	[key: string]: (count: number) => number;
 }
 
 function Checkout() {
@@ -60,20 +55,6 @@ function Checkout() {
 		}
 	};
 
-	const addOrRemovePeople = (event: React.MouseEvent<HTMLButtonElement>, type: string, operation: string) => {
-		event.preventDefault();
-		const operations: PeopleCounts = {
-			add: (count) => count + 1,
-			remove: (count) => count - 1,
-		};
-		
-		if (type === 'adult') {
-			setAdults((prevAdults) => operations[operation](prevAdults));
-		} else {
-			setChildren((prevChildren) => operations[operation](prevChildren));
-		}
-	};
-
 	const updatePeopleData = ({data, index}: updatePeopleData) => {
 		const newData = [...peopleData];
 		
@@ -96,46 +77,18 @@ function Checkout() {
 		<form>
 			<CheckoutContainer>
 				<PassengersContainer>
-					<div>
-						<h3>Passageiros</h3>
-						<p>dados</p>
-						<div>
-							<span>Adultos: {adults}</span>
-							<button
-								onClick={(event) => addOrRemovePeople(event, 'adult', 'remove')}
-								disabled={adults <= 1 ? true : false}
-							>
-								<img src={removePeopleIcon} className="logo react" alt="React logo" />
-							</button>
-							<button
-								onClick={(event) => addOrRemovePeople(event, 'adult', 'add')}
-								disabled={adults >= 4 ? true : false}
-							>
-								<img src={addPeopleIcon} className="logo react" alt="React logo" />
-							</button>
-						</div>
-						<div>
-							<span>Crianças: {children}</span>
-							<button
-								onClick={(event) => addOrRemovePeople(event, 'children', 'remove')}
-								disabled={children <= 0 ? true : false}
-							>
-								<img src={removePeopleIcon} className="logo react" alt="React logo" />
-							</button>
-							<button
-								onClick={(event) => addOrRemovePeople(event, 'children', 'add')}
-								disabled={children >= 4 ? true : false}
-							>
-								<img src={addPeopleIcon} className="logo react" alt="React logo" />
-							</button>
-						</div>
-					</div>
-					<h2>Quem são os passageiros?</h2>
+					<PassengerControl
+						adults={adults}
+						children={children}
+						setAdults={setAdults}
+						setChildren={setChildren}
+					/>
+					<h3>Quem são os adultos?</h3>
 					{showPeopleForm()}
 				</PassengersContainer>
 				<ResumeContainer>
 					<TripDataInput/>
-					<button onClick={validateData}>Validate Form</button>
+					<button className="validate-form" onClick={validateData}>Validar os dados</button>
 				</ResumeContainer>
 			</CheckoutContainer>
 		</form>

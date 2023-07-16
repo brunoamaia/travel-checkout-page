@@ -1,4 +1,5 @@
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
+import { TripDataInputContainer } from './styles';
 
 function TripDataInput() {
 	const [startDate, setStartDate] = useState<string>('');
@@ -9,9 +10,9 @@ function TripDataInput() {
 	// Usar select para poder selecionar as cidades
 	// Validar datas para chegada ser sempre depois e saída não ser "no passado"
 	return (
-		<Fragment>
-			<h4>Duração e roteiro da viagem</h4>
-			<h5>Roteiro</h5>
+		<TripDataInputContainer>
+			<h3>Duração e roteiro da viagem</h3>
+			<h4>Roteiro</h4>
 			<div className="label-input">
 				<label htmlFor="startDate">Origem:</label>
 				<input
@@ -31,7 +32,7 @@ function TripDataInput() {
 				/>
 			</div>
 
-			<h5>Data</h5>
+			<h4>Data</h4>
 			<div className="label-input">
 				<label htmlFor="startDate">Saída:</label>
 				<input
@@ -50,7 +51,7 @@ function TripDataInput() {
 					onChange={(e) => setEndDate(e.target.value)}
 				/>
 			</div>
-		</Fragment>
+		</TripDataInputContainer>
 	);
 }
 
