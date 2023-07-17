@@ -9,13 +9,13 @@ interface FormProps {
 }
 
 interface updatePeopleData {
-	data: FormProps
-	index: number
+	data: FormProps;
+	index: number;
 }
 
 interface AdultFieldProps {
-	index: number
-	type: string
+	index: number;
+	type: string;
 	updateData: ({data, index}: updatePeopleData) => void;
 }
 
@@ -25,7 +25,7 @@ function AdultDataInput({ index, type, updateData }: AdultFieldProps) {
 	const [email, setEmail] = useState('');
 	const [phone, setPhone] = useState('');
 
-	const handleSave = () => {
+	const handleUpdateAdultData = () => {
 		const formData: FormProps = {
 			name: name,
 			cpf: cpf,
@@ -33,11 +33,11 @@ function AdultDataInput({ index, type, updateData }: AdultFieldProps) {
 			phone: phone,
 		};
 
-		updateData({data: formData, index: 0});
+		updateData({data: formData, index: index});
 	};
 
 	useEffect(() => {
-		handleSave();
+		handleUpdateAdultData();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [name, cpf, email, phone]);
 

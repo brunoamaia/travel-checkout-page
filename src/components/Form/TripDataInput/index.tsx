@@ -1,7 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TripDataInputContainer } from './styles';
 
-function TripDataInput() {
+interface PlacesInfoProps {
+	destiny: string;
+	origin: string;
+	startDate: string;
+	endDate: string;
+}
+
+interface updatePeopleData {
+	data: PlacesInfoProps
+}
+
+interface AdultFieldProps {
+	updateLocationsData: ({data}: updatePeopleData) => void;
+}
+
+function TripDataInput({ updateLocationsData }: AdultFieldProps) {
 	const [startDate, setStartDate] = useState<string>('');
 	const [endDate, setEndDate] = useState<string>('');
 	const [origin, setOrigin] = useState<string>('');
@@ -9,6 +24,19 @@ function TripDataInput() {
 
 	// Usar select para poder selecionar as cidades
 	// Validar datas para chegada ser sempre depois e saída não ser "no passado"
+
+	useEffect(() => {
+		updateLocationsData({
+			data: {
+				destiny,
+				origin,
+				startDate,
+				endDate
+			}
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [startDate, endDate, origin, destiny]);
+	
 	return (
 		<TripDataInputContainer>
 			<h3>Duração e roteiro da viagem</h3>

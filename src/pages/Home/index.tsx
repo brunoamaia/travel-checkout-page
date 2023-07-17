@@ -6,33 +6,58 @@ import { HomeContainer, PassengersContainer, ResumeContainer } from './styles';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
-interface PeopleFormData {
+interface AdultInfoProps {
 	email: string;
 	cpf: string;
 	name: string;
 	phone: string;
 }
 
-interface TripFormData {
-	origin: string;
+interface PlacesInfoProps {
 	destiny: string;
+	origin: string;
 	startDate: string;
 	endDate: string;
 }
 
-interface updatePeopleData {
-	data: PeopleFormData
-	index: number
+interface TravelFormData {
+	adultInfo: AdultInfoProps[]
+	placesInfo: PlacesInfoProps;
+}
+
+interface updatePeopleDataProps {
+	data: AdultInfoProps;
+	index: number;
+}
+
+interface updateLocationsDataProps {
+	data: PlacesInfoProps
+}
+
+interface ErrorStructureProps {
+	field: string;
+	info: string;
 }
 
 function Home() {
-	const [peopleData, setPeopleData] = useState<PeopleFormData[]>([]);
-	const [tripData, setTripData] = useState<TripFormData>({
-		origin: '', destiny: '', startDate: '', endDate: ''
+	const [numberOfAdults, setNumberOfAdults] = useState<number>(1);
+	const [numberOfChildren, setNumberOfChildren] = useState<number>(0);
+	const [isValidForm, setIsValidForm] = useState<boolean>(true);
+	const [hasError, setHasError] = useState<ErrorStructureProps[]>([]);
+	const [travelData, setTravelData] = useState<TravelFormData>({
+		adultInfo: [{
+			email: '',
+			cpf: '',
+			name: '',
+			phone: '',
+		}],
+		placesInfo: {
+			destiny: '',
+			origin: '',
+			startDate: '',
+			endDate: ''
+		}
 	});
-	const [adults, setAdults] = useState<number>(1);
-	const [children, setChildren] = useState<number>(0);
-	const [isFormValid, setIsFormValid] = useState<boolean>(true);
 
 	const validateData = (event: React.MouseEvent<HTMLButtonElement>) => {
 		let isValid = false;
@@ -40,39 +65,42 @@ function Home() {
 		// Depois remover "preventDefault" para fazer a validação dos campos e não redirecionar
 		event.preventDefault();
 	
-		if (peopleData.length === 0) {
+		if (travelData.adultInfo.length === 0) {
 			isValid = false;
 		}
 
 		// Realizar a validação real do formulário
-		setIsFormValid(isValid);
+		setIsValidForm(isValid);
 
-		console.log(peopleData);
+		console.log(travelData);
 	
 		if (isValid) {
 			console.log('Formulário válido');
-			console.log(peopleData);
+			console.log(travelData);
 		} else {
 			console.log('Formulário inválido');
 		}
 	};
 
-	const updatePeopleData = ({data, index}: updatePeopleData) => {
-		const newData = [...peopleData];
+	const updatePeopleData = ({data, index}: updatePeopleDataProps) => {
+		const { adultInfo, placesInfo } = travelData;
+		const newData = [...adultInfo];
 		
 		newData[index] = data;
 
-		setPeopleData(newData);
-		console.log(newData);
-		console.log(tripData);
+		setTravelData({
+			adultInfo: newData,
+			placesInfo,
+		});
 	};
 
-	const showPeopleForm = () => {
-		return (
-			Array.from({ length: adults }, (_, index) => (
-				<AdultDataInput key={index} index={index} type={'Adulto'} updateData={updatePeopleData} />
-			))
-		);
+	const updateLocationsData = ({data}: updateLocationsDataProps) => {
+		const { adultInfo } = travelData;
+
+		setTravelData({
+			adultInfo: adultInfo,
+			placesInfo: {...data}
+		});
 	};
 
 	return (
@@ -82,17 +110,27 @@ function Home() {
 				<HomeContainer>
 					<PassengersContainer>
 						<PassengerControl
-							adults={adults}
-							children={children}
-							setAdults={setAdults}
-							setChildren={setChildren}
+							adults={numberOfAdults}
+							children={numberOfChildren}
+							setAdults={setNumberOfAdults}
+							setChildren={setNumberOfChildren}
 						/>
 						<h3>Quem são os adultos?</h3>
-						{showPeopleForm()}
+						{
+							Array.from({ length: numberOfAdults }, (_, index) => (
+								<AdultDataInput key={index} index={index} type={'Adulto'} updateData={updatePeopleData} />
+							))
+						}
 					</PassengersContainer>
 					<ResumeContainer>
-						<TripDataInput/>
+						<TripDataInput updateLocationsData={updateLocationsData} />
 						<button className="validate-form" onClick={validateData}>Validar os dados</button>
+						{hasError.map (({ field, info }, index) => (
+							<div key={index} className="error">
+								<p>{field}</p>
+								<span>{info}</span>
+							</div>
+						))}
 					</ResumeContainer>
 				</HomeContainer>
 			</form>
