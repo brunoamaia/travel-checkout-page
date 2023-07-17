@@ -1,97 +1,23 @@
-import React, { useState } from 'react';
-import AdultDataInput from '../../components/Form/AdultDataInput';
-import TripDataInput from '../../components/Form/TripDataInput';
-import PassengerControl from '../../components/Form/PassengerControl';
-import { CheckoutContainer, PassengersContainer, ResumeContainer } from './styles';
-
-interface PeopleFormData {
-	email: string;
-	cpf: string;
-	name: string;
-	phone: string;
-}
-
-interface TripFormData {
-	origin: string;
-	destiny: string;
-	startDate: string;
-	endDate: string;
-}
-
-interface updatePeopleData {
-	data: PeopleFormData
-	index: number
-}
+import { Link } from 'react-router-dom';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import { Fragment } from 'react';
+import { CheckoutContainer } from './styles';
 
 function Checkout() {
-	const [peopleData, setPeopleData] = useState<PeopleFormData[]>([]);
-	const [tripData, setTripData] = useState<TripFormData>({
-		origin: '', destiny: '', startDate: '', endDate: ''
-	});
-	const [adults, setAdults] = useState<number>(1);
-	const [children, setChildren] = useState<number>(0);
-	const [isFormValid, setIsFormValid] = useState<boolean>(true);
-
-	const validateData = (event: React.MouseEvent<HTMLButtonElement>) => {
-		let isValid = false;
-
-		// Depois remover "preventDefault" para fazer a validação dos campos e não redirecionar
-		event.preventDefault();
-	
-		if (peopleData.length === 0) {
-			isValid = false;
-		}
-
-		// Realizar a validação real do formulário
-		setIsFormValid(isValid);
-
-		console.log(peopleData);
-	
-		if (isValid) {
-			console.log('Formulário válido');
-			console.log(peopleData);
-		} else {
-			console.log('Formulário inválido');
-		}
-	};
-
-	const updatePeopleData = ({data, index}: updatePeopleData) => {
-		const newData = [...peopleData];
-		
-		newData[index] = data;
-
-		setPeopleData(newData);
-		console.log(newData);
-		console.log(tripData);
-	};
-
-	const showPeopleForm = () => {
-		return (
-			Array.from({ length: adults }, (_, index) => (
-				<AdultDataInput key={index} index={index} type={'Adulto'} updateData={updatePeopleData} />
-			))
-		);
-	};
-
-	return (
-		<form>
+	return(
+		<Fragment>
+			<Header/>
 			<CheckoutContainer>
-				<PassengersContainer>
-					<PassengerControl
-						adults={adults}
-						children={children}
-						setAdults={setAdults}
-						setChildren={setChildren}
-					/>
-					<h3>Quem são os adultos?</h3>
-					{showPeopleForm()}
-				</PassengersContainer>
-				<ResumeContainer>
-					<TripDataInput/>
-					<button className="validate-form" onClick={validateData}>Validar os dados</button>
-				</ResumeContainer>
+				<div className="card">
+					<Link to="/">Voltar para o cadastro</Link>
+					<p>
+					Página para mostrar os dados armazenados
+					</p>
+				</div>
 			</CheckoutContainer>
-		</form>
+			<Footer/>
+		</Fragment>
 	);
 }
 
