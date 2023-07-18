@@ -18,8 +18,8 @@ interface AdultInfoProps {
 interface PlacesInfoProps {
 	destiny: string;
 	origin: string;
-	startDate: string;
-	endDate: string;
+	startDate: string | number;
+	endDate: string | number;
 }
 
 interface TravelFormData {
@@ -114,7 +114,12 @@ function Home() {
 					</PassengersContainer>
 					<ResumeContainer>
 						<TripDataInput updateLocationsData={updateLocationsData} />
-						<button className="validate-form" onClick={(e) => validateFormData(e, travelData, setHasError, setIsValidForm)}>Validar os dados</button>
+						<button
+							className="validate-form" 
+							onClick={(e) => validateFormData(e, travelData, setHasError, setTravelData, setIsValidForm)}
+						>
+							Validar os dados
+						</button>
 						{hasError.length > 0 && <h4 className='error-message'>Corrija os seguintes campos</h4>}
 						{hasError.map ((errorInfo, index) => {
 							const code = String(errorInfo[0]);

@@ -24,15 +24,41 @@ function AdultDataInput({ index, type, updateData }: AdultFieldProps) {
 	const [cpf, setCpf] = useState('');
 	const [email, setEmail] = useState('');
 	const [phone, setPhone] = useState('');
+	
+	const insertPhoneMask = (value: string) => {
+		let inputValue = value;
+		
+		inputValue = inputValue.replace(/\D/g,'');
+		inputValue = inputValue.replace(/(^\d{2})(\d)/,'($1) $2');
+		inputValue = inputValue.replace(/(\d{4,5})(\d{4}$)/,'$1-$2');
+
+		return inputValue;
+	};
+
+	const insertCpfMask = (value: string) => {
+		let inputValue = value;
+		
+		inputValue=inputValue.replace(/\D/g,'');
+		inputValue=inputValue.replace(/(\d{3})(\d)/,'$1.$2');
+		inputValue=inputValue.replace(/(\d{3})(\d)/,'$1.$2');
+		inputValue=inputValue.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+		
+		return inputValue;
+	};
 
 	const handleUpdateAdultData = () => {
+		const phoneWithMask = insertPhoneMask(phone);
+		const cpfWithMask = insertCpfMask(cpf);
+
 		const formData: FormProps = {
 			name: name,
-			cpf: cpf,
+			cpf: cpfWithMask,
 			email: email,
-			phone: phone,
+			phone: phoneWithMask,
 		};
 
+		setCpf(cpfWithMask);
+		setPhone(phoneWithMask);
 		updateData({data: formData, index: index});
 	};
 

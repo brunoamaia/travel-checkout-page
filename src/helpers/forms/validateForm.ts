@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { Dispatch, MouseEvent, SetStateAction } from 'react';
 
 interface AdultInfoProps {
 	email: string;
@@ -10,8 +10,8 @@ interface AdultInfoProps {
 interface PlacesInfoProps {
 	destiny: string;
 	origin: string;
-	startDate: string;
-	endDate: string;
+	startDate: string | number;
+	endDate: string | number;
 }
 
 interface TravelFormData {
@@ -29,32 +29,42 @@ interface validateAdultDataProps {
 	): ErrorProps;
 }
 
+interface insertAdultErrorProps {
+	(
+		field: string,
+		info: string
+	): void;
+}
+
 const validateAdultData: validateAdultDataProps = (adultData) => {
-	const propertiesToValidate: Record<string, number> = {
-		name: 6,
-		cpf: 9,
-		email: 12,
-		phone: 12,
-	};
 	const adultErrors: ErrorProps = {};
 
+	const insertError: insertAdultErrorProps = (field, info) => {
+		if (!adultErrors[field]) {
+			adultErrors[field] = [info];
+		} else {
+			adultErrors[field].push(info);
+		}
+	};
+
 	for (let index = 0; index < adultData.length; index++) {
-		const adult = adultData[index];
+		const { name, cpf, email, phone } = adultData[index];
+		const field = `people${index}`;
 
-		for (const property in propertiesToValidate) {
-			if (property in propertiesToValidate) {
-				const maxLength = propertiesToValidate[property];
-				const value = adult[property as keyof AdultInfoProps];
-				const field = `people${index}`;
+		if (name.length <= 7) {
+			insertError(field, 'name');
+		}
 
-				if (value.length <= maxLength) {
-					if (!adultErrors[field]) {
-						adultErrors[field] = [property];
-					} else {
-						adultErrors[field].push(property);
-					}
-				}
-			}
+		if (cpf.length !== 14) {
+			insertError(field, 'cpf');
+		}
+
+		if (phone.length !== 15) {
+			insertError(field, 'phone');
+		}
+
+		if (email.length <= 10) {
+			insertError(field, 'email');
 		}
 	}
 
@@ -63,12 +73,16 @@ const validateAdultData: validateAdultDataProps = (adultData) => {
 
 interface setTimestampDateProps {
 	(
-		stringData: string
-	): number
+		date: number| string 
+	): number;
 }
 
-const setTimestampDate: setTimestampDateProps = (stringData) => {
-	const dateWitchHour = `${stringData} 14:00`;
+const setTimestampDate: setTimestampDateProps = (date) => {
+	if (typeof date === 'number') {
+		return date;
+	}
+	
+	const dateWitchHour = `${date} 14:00`;
 	const newDate = new Date(dateWitchHour);
 
 	return newDate.getTime();
@@ -79,10 +93,10 @@ interface validatePlacesDataProps {
 		placesData: {
 			destiny: string;
 			origin: string;
-			startDate: number | null;
-			endDate: number | null;
+			startDate: number;
+			endDate: number;
 		}
-	): ErrorProps
+	): ErrorProps;
 }
 
 const validatePlacesData: validatePlacesDataProps = (placesData) => {
@@ -158,16 +172,17 @@ interface validateFormDataProps {
 	(
 		event: MouseEvent<HTMLButtonElement>,
 		travelData: TravelFormData,
-		setHasError: React.Dispatch<React.SetStateAction<ErrorArrayProps[]>>,
-		setIsValidForm: React.Dispatch<React.SetStateAction<boolean>>
+		setHasError: Dispatch<SetStateAction<ErrorArrayProps[]>>,
+		setTravelData: Dispatch<SetStateAction<TravelFormData>>,
+		setIsValidForm: Dispatch<SetStateAction<boolean>>
 	): void;
 }
 
-export const validateFormData:validateFormDataProps = (event, travelData, setHasError, setIsValidForm) => {
+export const validateFormData:validateFormDataProps = (event, travelData, setHasError, setTravelData, setIsValidForm) => {
 	const { adultInfo, placesInfo } = travelData;
 	const { endDate, startDate } = placesInfo;
-	const initialDate = startDate ? setTimestampDate(startDate) : null;
-	const finalDate = endDate ? setTimestampDate(endDate) : null;
+	const initialDate = startDate ? setTimestampDate(startDate) : 0;
+	const finalDate = endDate ? setTimestampDate(endDate) : 0;
 	const newPlacesInfo = {
 		...placesInfo,
 		startDate: initialDate,
@@ -183,6 +198,15 @@ export const validateFormData:validateFormDataProps = (event, travelData, setHas
 	errors = {...adultErrors, ...placesErrors};
 
 	if(!Object.keys(errors).length ) {
+		const placesData = {
+			...placesInfo,
+			endDate: finalDate,
+			startDate: initialDate
+		};
+		setTravelData({
+			...travelData,
+			placesInfo: { ...placesData}
+		});
 		setIsValidForm(true);
 	}
 
