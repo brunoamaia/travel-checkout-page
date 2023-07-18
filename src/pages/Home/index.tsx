@@ -83,6 +83,28 @@ function Home() {
 		});
 	};
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	const resizeAdultsDataArray = () => {
+		const { adultInfo, placesInfo } = travelData;
+		const newAdultInfo = [...adultInfo];
+		
+		if (adultInfo.length > numberOfAdults) {
+			newAdultInfo.pop();
+
+			setTravelData({
+				adultInfo: newAdultInfo,
+				placesInfo
+			});
+		} else if (adultInfo.length < numberOfAdults) {
+			newAdultInfo.push(defaultFormData.adultInfo[0]);
+
+			setTravelData({
+				adultInfo: newAdultInfo,
+				placesInfo
+			});
+		}
+	};
+
 	const handleSubmitForm = () => {
 		console.log('Foi');
 	};
@@ -91,7 +113,12 @@ function Home() {
 		if (isValidForm) {
 			handleSubmitForm();
 		}
-	}, [isValidForm]);
+
+		if (travelData.adultInfo.length !== numberOfAdults) {
+			resizeAdultsDataArray();
+		}
+
+	}, [isValidForm, numberOfAdults, resizeAdultsDataArray, travelData]);
 
 	return (
 		<Fragment>

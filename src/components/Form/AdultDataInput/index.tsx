@@ -89,7 +89,7 @@ function AdultDataInput({ index, type, updateData }: AdultFieldProps) {
 					type="text"
 					value={cpf}
 					onChange={(e) => setCpf(e.target.value)}
-					placeholder="AAA.BBB.CCC-DD"
+					placeholder="111.222.333-44"
 					pattern="([0-9]{3}).([0-9]{3}).([0-9]{3})-([0-9]{2})"
 					required
 				/>
@@ -102,7 +102,7 @@ function AdultDataInput({ index, type, updateData }: AdultFieldProps) {
 					type="text"
 					value={phone}
 					onChange={(e) => setPhone(e.target.value)}
-					placeholder="(XX) AAAAA-BBBB"
+					placeholder="(XX) 99999-8888"
 					pattern="(\([0-9]{2}\))\s([0-9]{1})?([0-9]{4})-([0-9]{4})"
 					required
 				/>
