@@ -24,12 +24,24 @@ export const GlobalStyle = createGlobalStyle`
 		line-height: 1.1;
 	}
 
+	h2 {
+		font-size: 1.5em;
+	}
+
+	h3 {
+		font-size: 1.4em;
+	}
+
+	h4 {
+		font-size: 1.2em;
+	}
+
 	button {
 		border-radius: 15px;
 		padding: 0 15px;
 		color: #FFF;
-		border: 4px solid #252621;
-		background-color: #252621;
+		border: 4px solid #08852e;
+		background-color: #08852e;
 		cursor: pointer;
 		min-width: 100px;
 	}

@@ -36,6 +36,7 @@ function PassengerControl({adults, children, setAdults, setChildren}: PassengerC
 			<div className='quantity-control'>
 				<p>Adultos: {adults}</p>
 				<button
+					className='btn-minus'
 					onClick={(event) => addOrRemovePeople(event, 'adult', 'remove')}
 					disabled={adults <= 1 ? true : false}
 				>
@@ -51,6 +52,7 @@ function PassengerControl({adults, children, setAdults, setChildren}: PassengerC
 			<div className='quantity-control'>
 				<p>Crianças: {children}</p>
 				<button
+					className='btn-minus'
 					onClick={(event) => addOrRemovePeople(event, 'children', 'remove')}
 					disabled={children <= 0 ? true : false}
 				>

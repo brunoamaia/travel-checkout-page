@@ -1,26 +1,52 @@
 import styled from 'styled-components';
 
 export const HomeContainer = styled.div`
-	display: flex;
-	flex: 1;
-	justify-content: space-between;
 	margin: 0 auto;
-	border: 1px solid #4A2;
+	background-color: rgba(255, 255, 255, 0.5);
+	min-height: calc(100vh - 160px);
 
-	@media screen and (max-width: 1000px) {
-		max-width: 900px;
+	width: 100vw;
+	padding: 50px;
+	margin: 0 auto;
+
+	.content {
+		display: flex;
+		flex: 1;
+		justify-content: space-between;
+		margin: 0 auto;
+		border: 1px solid #333;
+		border-radius: 20px;
+		background-color: rgba(255, 255, 255, 0.3);
+	}
+
+	@media screen and (max-width: 600px) {
+		.content {
+			flex-direction: column;
+			margin: 0;
+		}
 	}
 
 	@media screen and (min-width: 1001px) {
-		max-width: 1000px;
+		.content {
+			max-width: 950px;
+		}
+
+		body {
+			overflow: hidden;
+		}
 	}
 
-	h3 {
-		font-size: 1.4em;
+	@media screen and (min-width: 1400px) {
+		.content {
+			max-width: 1300px;
+		}
+
+		body {
+			overflow: hidden;
+		}
 	}
 
 	h4 {
-		font-size: 1.2em;
 		margin-left: 5px;
 	}
 
@@ -68,11 +94,32 @@ export const HomeContainer = styled.div`
 			margin-right: 5px;
 		}
 	}
+
+	.background {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: -1;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+
+		}
+	}
 `;
 
 export const PassengersContainer = styled.div`
 	width: 60%;
-	border: 1px solid #723;
+	padding: 10px;
+
+	@media screen and (max-width: 850px) {
+		width: 50%;
+	}
+
+	@media screen and (max-width: 600px) {
+		width: 100%;
+	}
 `;
 
 export const ResumeContainer = styled.div`
@@ -81,9 +128,20 @@ export const ResumeContainer = styled.div`
 	align-items: center;
 	justify-content: flex-start;
 	width: 40%;
-	border: 1px solid #12a;
+	border-left: 1px solid #333;
+	padding: 10px;
 
 	.validate-form {
 		margin-top: 30px;
+	}
+
+	@media screen and (max-width: 850px) {
+		width: 50%;
+	}
+
+	@media screen and (max-width: 600px) {
+		width: 100%;
+		border-top: 1px solid #333;
+		border-left: none;
 	}
 `;

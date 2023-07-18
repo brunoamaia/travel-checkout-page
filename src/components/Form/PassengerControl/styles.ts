@@ -18,10 +18,15 @@ export const PassengerControlContainer = styled.div`
 			width: 35px;
 			height: 20px;
 			padding: 0 5px;
+
+			&.btn-minus {
+				background-color: #923;
+			}
 		}
 
 		button:disabled {
 			border: none;
+			background-color: #666;
 		}
 	
 		img {

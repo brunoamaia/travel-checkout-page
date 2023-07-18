@@ -4,7 +4,8 @@ function Header() {
 
 	return (
 		<HeaderContainer>
-			<h1>Header</h1>
+			<h1>Boa viajem</h1>
+			<p>Viaje tranquilo</p>
 		</HeaderContainer>
 	);
 }

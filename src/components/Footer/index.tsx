@@ -4,7 +4,7 @@ function Footer() {
 
 	return (
 		<FooterContainer>
-			<h1>Footer</h1>
+			<p>Qualquer dúvida, entre em contato</p>
 		</FooterContainer>
 	);
 }
