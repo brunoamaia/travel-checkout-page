@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AdultDataInput from '../../components/Form/AdultDataInput';
 import TripDataInput from '../../components/Form/TripDataInput';
 import PassengerControl from '../../components/Form/PassengerControl';
@@ -7,6 +8,7 @@ import Footer from '../../components/Footer';
 import { validateFormData } from '../../helpers/forms/validateForm';
 import terms from '../../helpers/terms';
 import { HomeContainer, PassengersContainer, ResumeContainer } from './styles';
+import backgroundImg from '/background.jpg';
 
 interface AdultInfoProps {
 	email: string;
@@ -57,9 +59,11 @@ const defaultFormData = {
 };
 
 function Home() {
+	const navigate = useNavigate();
 	const [numberOfAdults, setNumberOfAdults] = useState<number>(1);
 	const [numberOfChildren, setNumberOfChildren] = useState<number>(0);
 	const [isValidForm, setIsValidForm] = useState<boolean>(false);
+	const [isRedirect, setIsRedirect] = useState<boolean>(false);
 	const [hasError, setHasError] = useState<ErrorArrayProps[]>([]);
 	const [travelData, setTravelData] = useState<TravelFormData>(defaultFormData);
 	const updatePeopleData = ({data, index}: updatePeopleDataProps) => {
@@ -106,63 +110,77 @@ function Home() {
 	};
 
 	const handleSubmitForm = () => {
-		console.log('Foi');
+		window.localStorage.setItem('fakeRequest', JSON.stringify(travelData));
+		setIsRedirect(true);
+	};
+	
+	const handleRedirectPage = () => {
+		navigate('/checkout');
 	};
 
 	useEffect(() => {
-		if (isValidForm) {
+		if (isValidForm && !isRedirect) {
 			handleSubmitForm();
 		}
 
 		if (travelData.adultInfo.length !== numberOfAdults) {
 			resizeAdultsDataArray();
 		}
-
-	}, [isValidForm, numberOfAdults, resizeAdultsDataArray, travelData]);
+		
+		if (isRedirect) {
+			handleRedirectPage();
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isRedirect, isValidForm, numberOfAdults, travelData]);
 
 	return (
 		<Fragment>
 			<Header/>
 			<form>
 				<HomeContainer>
-					<PassengersContainer>
-						<PassengerControl
-							adults={numberOfAdults}
-							children={numberOfChildren}
-							setAdults={setNumberOfAdults}
-							setChildren={setNumberOfChildren}
-						/>
-						<h3>Quem são os adultos?</h3>
-						{
-							Array.from({ length: numberOfAdults }, (_, index) => (
-								<AdultDataInput key={index} index={index} type={'Adulto'} updateData={updatePeopleData} />
-							))
-						}
-					</PassengersContainer>
-					<ResumeContainer>
-						<TripDataInput updateLocationsData={updateLocationsData} />
-						<button
-							className="validate-form" 
-							onClick={(e) => validateFormData(e, travelData, setHasError, setTravelData, setIsValidForm)}
-						>
+					<div className="content">
+						<PassengersContainer>
+							<PassengerControl
+								adults={numberOfAdults}
+								children={numberOfChildren}
+								setAdults={setNumberOfAdults}
+								setChildren={setNumberOfChildren}
+							/>
+							<h3>Quem são os adultos?</h3>
+							{
+								Array.from({ length: numberOfAdults }, (_, index) => (
+									<AdultDataInput key={index} index={index} type={'Adulto'} updateData={updatePeopleData} />
+								))
+							}
+						</PassengersContainer>
+						<ResumeContainer>
+							<TripDataInput updateLocationsData={updateLocationsData} />
+							<button
+								className="validate-form" 
+								onClick={(e) => validateFormData(e, travelData, setHasError, setTravelData, setIsValidForm)}
+							>
 							Validar os dados
-						</button>
-						{hasError.length > 0 && <h4 className='error-message'>Corrija os seguintes campos</h4>}
-						{hasError.map ((errorInfo, index) => {
-							const code = String(errorInfo[0]);
+							</button>
+							{hasError.length > 0 && <h4 className='error-message'>Corrija os seguintes campos</h4>}
+							{hasError.map ((errorInfo, index) => {
+								const code = String(errorInfo[0]);
 
-							return (
-								<div key={index} className="error-container">
-									<p className="error-field">{terms[code]}</p>
-									<div className="error-info">
-										{ errorInfo[1].map ((error, index) => (
-											<p key={index}>{terms[error]}</p>
-										))}
+								return (
+									<div key={index} className="error-container">
+										<p className="error-field">{terms[code]}</p>
+										<div className="error-info">
+											{ errorInfo[1].map ((error, index) => (
+												<p key={index}>{terms[error]}</p>
+											))}
+										</div>
 									</div>
-								</div>
-							);
-						})}
-					</ResumeContainer>
+								);
+							})}
+						</ResumeContainer>
+					</div>
+					<div className="background">
+						<img src={backgroundImg} className="logo react" alt="Imagem de plano de fundo mostrando uma praia" />
+					</div>
 				</HomeContainer>
 			</form>
 			<Footer/>
