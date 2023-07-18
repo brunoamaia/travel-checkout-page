@@ -18,12 +18,18 @@ interface PlacesInfoProps {
 	endDate: string | number;
 }
 
+interface QuantityPeopleProps {
+	adult: number;
+	children: number
+}
+
 interface TravelFormData {
 	adultInfo: AdultInfoProps[];
 	placesInfo: PlacesInfoProps;
+	quantityPeople: QuantityPeopleProps;
 }
 
-const defaultFormData = {
+const defaultFormData:TravelFormData = {
 	adultInfo: [{
 		email: '',
 		cpf: '',
@@ -35,6 +41,10 @@ const defaultFormData = {
 		origin: '',
 		startDate: '',
 		endDate: ''
+	},
+	quantityPeople: {
+		adult: 1,
+		children: 0
 	}
 };
 function Checkout() {
@@ -49,6 +59,27 @@ function Checkout() {
 			console.log(travelData);
 			// window.localStorage.removeItem('fakeRequest');
 		}
+	};
+
+	const renderQuantityPeople = () => {
+		const {quantityPeople} = travelData;
+		const {adult, children} = quantityPeople;
+
+		return (
+			<div className="places-info">
+				<div className="place-label">
+					<h3>Quantidade de pessoas: {adult + children}</h3>
+				</div>
+				<div className="data-key">
+					<p className="field">Quantidade de adultos:</p>
+					<p className="info">{adult}</p>
+				</div>
+				<div className="data-key">
+					<p className="field">Quantidade de crianças:</p>
+					<p className="info">{children}</p>
+				</div>
+			</div>
+		);
 	};
 
 	const renderPeopleData = () => {
@@ -116,6 +147,7 @@ function Checkout() {
 	const renderDataInHtml = () => {
 		return (
 			<div className="data">
+				{renderQuantityPeople()}
 				{renderPeopleData()}
 				{renderPlacesData()}
 			</div>	

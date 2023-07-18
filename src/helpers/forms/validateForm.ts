@@ -13,10 +13,15 @@ interface PlacesInfoProps {
 	startDate: string | number;
 	endDate: string | number;
 }
+interface QuantityPeopleProps {
+	adult: number;
+	children: number
+}
 
 interface TravelFormData {
 	adultInfo: AdultInfoProps[];
 	placesInfo: PlacesInfoProps;
+	quantityPeople: QuantityPeopleProps;
 }
 
 interface ErrorProps {
@@ -210,5 +215,6 @@ export const validateFormData:validateFormDataProps = (event, travelData, setHas
 		setIsValidForm(true);
 	}
 
+	console.log(travelData);
 	setHasError(Object.entries(errors));
 };

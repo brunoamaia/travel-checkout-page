@@ -14,9 +14,13 @@ export const HomeContainer = styled.div`
 		flex: 1;
 		justify-content: space-between;
 		margin: 0 auto;
-		border: 1px solid #333;
+		border: 2px solid #333;
 		border-radius: 20px;
 		background-color: rgba(255, 255, 255, 0.3);
+	}
+
+	@media screen and (max-width: 450px) {
+		padding: 30px 20px;
 	}
 
 	@media screen and (max-width: 600px) {
@@ -100,12 +104,29 @@ export const HomeContainer = styled.div`
 		top: 0;
 		left: 0;
 		z-index: -1;
+		object-fit: cover;
+
 		img {
 			width: 100%;
 			height: 100%;
-			object-fit: cover;
+			object-fit: fill;
 
+			@media screen and (max-width: 600px) {
+				width: 250%;
+			}
 		}
+
+		@media screen and (max-width: 1400px) {
+			width: 150%;
+			max-height:700px;
+		}
+
+		@media screen and (max-width: 600px) {
+		.content {
+			flex-direction: column;
+			margin: 0;
+		}
+	}
 	}
 `;
 
@@ -128,7 +149,7 @@ export const ResumeContainer = styled.div`
 	align-items: center;
 	justify-content: flex-start;
 	width: 40%;
-	border-left: 1px solid #333;
+	border-left: 2px solid #333;
 	padding: 10px;
 
 	.validate-form {
@@ -141,7 +162,7 @@ export const ResumeContainer = styled.div`
 
 	@media screen and (max-width: 600px) {
 		width: 100%;
-		border-top: 1px solid #333;
+		border-top: 2px solid #333;
 		border-left: none;
 	}
 `;

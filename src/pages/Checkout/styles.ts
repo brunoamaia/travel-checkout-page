@@ -24,7 +24,7 @@ export const CheckoutContainer = styled.div`
 	.card {
 		margin: 0 auto;
 		padding: 10px;
-		margin: 50px auto;
+		margin: 30px auto;
 		border: 2px solid #333;
 		border-radius: 10px;
 		background-color: #DDD;
@@ -51,5 +51,6 @@ export const CheckoutContainer = styled.div`
 
 	button {
 		height: 40px;
+		margin-bottom: 20px;
 	}
 `;

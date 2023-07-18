@@ -3,30 +3,53 @@ import { PassengerControlContainer } from './styles';
 import addPeopleIcon from '/user-plus.svg';
 import removePeopleIcon from '/user-minus.svg';
 
+interface updatePeopleData {
+	data: {
+		adult: number;
+		children: number;
+	};
+}
+
 interface PassengerControlProps {
 	adults: number
 	children: number
 	setAdults: Dispatch<SetStateAction<number>>
 	setChildren: Dispatch<SetStateAction<number>>
+	updateData: ({data}: updatePeopleData) => void;
+
 }
 
-interface PeopleCounts {
-	[key: string]: (count: number) => number;
-}
-
-function PassengerControl({adults, children, setAdults, setChildren}: PassengerControlProps) {
+function PassengerControl({adults, children, setAdults, setChildren, updateData}: PassengerControlProps) {
 	const addOrRemovePeople = (event: MouseEvent<HTMLButtonElement>, type: string, operation: string) => {
+		let adultQuantity = adults;
+		let childQuantity = children;
+
 		event.preventDefault();
-		const operations: PeopleCounts = {
-			add: (count) => count + 1,
-			remove: (count) => count - 1,
-		};
 		
 		if (type === 'adult') {
-			setAdults((prevAdults) => operations[operation](prevAdults));
-		} else {
-			setChildren((prevChildren) => operations[operation](prevChildren));
+			if (operation === 'add') {
+				adultQuantity += 1;
+				setAdults(adultQuantity);
+			} else {
+				adultQuantity -= 1;
+				setAdults(adultQuantity);
+			}
+		} else if (type === 'children') {
+			if (operation === 'add') {
+				childQuantity += 1;
+				setChildren(childQuantity);
+			} else {
+				childQuantity -= 1;
+				setChildren(childQuantity);
+			}
 		}
+
+		updateData({ 
+			data: {
+				adult: adultQuantity,
+				children: childQuantity
+			}
+		});
 	};
 
 	return (

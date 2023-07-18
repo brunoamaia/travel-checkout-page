@@ -24,9 +24,15 @@ interface PlacesInfoProps {
 	endDate: string | number;
 }
 
+interface QuantityPeopleProps {
+	adult: number;
+	children: number;
+}
+
 interface TravelFormData {
 	adultInfo: AdultInfoProps[];
 	placesInfo: PlacesInfoProps;
+	quantityPeople: QuantityPeopleProps;
 }
 
 interface updatePeopleDataProps {
@@ -38,12 +44,19 @@ interface updateLocationsDataProps {
 	data: PlacesInfoProps;
 }
 
+interface updateQuantityPeopleDataProps {
+	data: {
+		adult: number;
+		children: number;
+	}
+}
+
 interface ErrorArrayProps {
 	[0]: string;
 	[1]: string[];
 }
 
-const defaultFormData = {
+const defaultFormData:TravelFormData = {
 	adultInfo: [{
 		email: '',
 		cpf: '',
@@ -55,6 +68,10 @@ const defaultFormData = {
 		origin: '',
 		startDate: '',
 		endDate: ''
+	},
+	quantityPeople: {
+		adult: 1,
+		children: 0
 	}
 };
 
@@ -66,8 +83,9 @@ function Home() {
 	const [isRedirect, setIsRedirect] = useState<boolean>(false);
 	const [hasError, setHasError] = useState<ErrorArrayProps[]>([]);
 	const [travelData, setTravelData] = useState<TravelFormData>(defaultFormData);
+	
 	const updatePeopleData = ({data, index}: updatePeopleDataProps) => {
-		const { adultInfo, placesInfo } = travelData;
+		const { adultInfo, placesInfo, quantityPeople } = travelData;
 		const newData = [...adultInfo];
 		
 		newData[index] = data;
@@ -75,21 +93,30 @@ function Home() {
 		setTravelData({
 			adultInfo: newData,
 			placesInfo,
+			quantityPeople
+		});
+	};
+
+	const updateQuantityPeopleData = ({data}: updateQuantityPeopleDataProps) => {
+		setTravelData({
+			...travelData,
+			quantityPeople: {...data}
 		});
 	};
 
 	const updateLocationsData = ({data}: updateLocationsDataProps) => {
-		const { adultInfo } = travelData;
+		const { adultInfo, quantityPeople } = travelData;
 
 		setTravelData({
 			adultInfo: adultInfo,
-			placesInfo: {...data}
+			placesInfo: {...data},
+			quantityPeople
 		});
 	};
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const resizeAdultsDataArray = () => {
-		const { adultInfo, placesInfo } = travelData;
+		const { adultInfo, placesInfo, quantityPeople } = travelData;
 		const newAdultInfo = [...adultInfo];
 		
 		if (adultInfo.length > numberOfAdults) {
@@ -97,14 +124,16 @@ function Home() {
 
 			setTravelData({
 				adultInfo: newAdultInfo,
-				placesInfo
+				placesInfo,
+				quantityPeople
 			});
 		} else if (adultInfo.length < numberOfAdults) {
 			newAdultInfo.push(defaultFormData.adultInfo[0]);
 
 			setTravelData({
 				adultInfo: newAdultInfo,
-				placesInfo
+				placesInfo,
+				quantityPeople
 			});
 		}
 	};
@@ -145,6 +174,7 @@ function Home() {
 								children={numberOfChildren}
 								setAdults={setNumberOfAdults}
 								setChildren={setNumberOfChildren}
+								updateData={updateQuantityPeopleData}
 							/>
 							<h3>Quem são os adultos?</h3>
 							{
