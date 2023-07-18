@@ -9,7 +9,7 @@ interface PlacesInfoProps {
 }
 
 interface updatePeopleData {
-	data: PlacesInfoProps
+	data: PlacesInfoProps;
 }
 
 interface AdultFieldProps {
@@ -71,7 +71,7 @@ function TripDataInput({ updateLocationsData }: AdultFieldProps) {
 				/>
 			</div>
 			<div className="label-input">
-				<label htmlFor="endDate">Chegada:</label>
+				<label htmlFor="endDate">Volta:</label>
 				<input
 					id="endDate"
 					type="date"

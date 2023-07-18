@@ -1,10 +1,11 @@
-import React, { Fragment, useState } from 'react';
+import { Fragment, MouseEvent, useEffect, useState } from 'react';
 import AdultDataInput from '../../components/Form/AdultDataInput';
 import TripDataInput from '../../components/Form/TripDataInput';
 import PassengerControl from '../../components/Form/PassengerControl';
 import { HomeContainer, PassengersContainer, ResumeContainer } from './styles';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import { validateFormData } from '../../helpers/forms/validateForm';
 
 interface AdultInfoProps {
 	email: string;
@@ -21,7 +22,7 @@ interface PlacesInfoProps {
 }
 
 interface TravelFormData {
-	adultInfo: AdultInfoProps[]
+	adultInfo: AdultInfoProps[];
 	placesInfo: PlacesInfoProps;
 }
 
@@ -31,7 +32,7 @@ interface updatePeopleDataProps {
 }
 
 interface updateLocationsDataProps {
-	data: PlacesInfoProps
+	data: PlacesInfoProps;
 }
 
 interface ErrorStructureProps {
@@ -39,49 +40,27 @@ interface ErrorStructureProps {
 	info: string;
 }
 
+const defaultFormData = {
+	adultInfo: [{
+		email: '',
+		cpf: '',
+		name: '',
+		phone: '',
+	}],
+	placesInfo: {
+		destiny: '',
+		origin: '',
+		startDate: '',
+		endDate: ''
+	}
+};
+
 function Home() {
 	const [numberOfAdults, setNumberOfAdults] = useState<number>(1);
 	const [numberOfChildren, setNumberOfChildren] = useState<number>(0);
-	const [isValidForm, setIsValidForm] = useState<boolean>(true);
+	const [isValidForm, setIsValidForm] = useState<boolean>(false);
 	const [hasError, setHasError] = useState<ErrorStructureProps[]>([]);
-	const [travelData, setTravelData] = useState<TravelFormData>({
-		adultInfo: [{
-			email: '',
-			cpf: '',
-			name: '',
-			phone: '',
-		}],
-		placesInfo: {
-			destiny: '',
-			origin: '',
-			startDate: '',
-			endDate: ''
-		}
-	});
-
-	const validateData = (event: React.MouseEvent<HTMLButtonElement>) => {
-		let isValid = false;
-
-		// Depois remover "preventDefault" para fazer a validação dos campos e não redirecionar
-		event.preventDefault();
-	
-		if (travelData.adultInfo.length === 0) {
-			isValid = false;
-		}
-
-		// Realizar a validação real do formulário
-		setIsValidForm(isValid);
-
-		console.log(travelData);
-	
-		if (isValid) {
-			console.log('Formulário válido');
-			console.log(travelData);
-		} else {
-			console.log('Formulário inválido');
-		}
-	};
-
+	const [travelData, setTravelData] = useState<TravelFormData>(defaultFormData);
 	const updatePeopleData = ({data, index}: updatePeopleDataProps) => {
 		const { adultInfo, placesInfo } = travelData;
 		const newData = [...adultInfo];
@@ -102,6 +81,21 @@ function Home() {
 			placesInfo: {...data}
 		});
 	};
+
+	const handleSubmitForm = () => {
+		console.log('Foi');
+	};
+
+	const resetStatus = (event: MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		setIsValidForm(false);
+	};
+
+	useEffect(() => {
+		if (isValidForm) {
+			handleSubmitForm();
+		}
+	}, [isValidForm]);
 
 	return (
 		<Fragment>
@@ -124,7 +118,8 @@ function Home() {
 					</PassengersContainer>
 					<ResumeContainer>
 						<TripDataInput updateLocationsData={updateLocationsData} />
-						<button className="validate-form" onClick={validateData}>Validar os dados</button>
+						<button className="validate-form" onClick={(e) => resetStatus(e)}>Resetar</button>
+						<button className="validate-form" onClick={(e) => validateFormData(e, travelData, setHasError, setIsValidForm)}>Validar os dados</button>
 						{hasError.map (({ field, info }, index) => (
 							<div key={index} className="error">
 								<p>{field}</p>
