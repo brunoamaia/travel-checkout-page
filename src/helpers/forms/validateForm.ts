@@ -19,15 +19,14 @@ interface TravelFormData {
 	placesInfo: PlacesInfoProps;
 }
 
-interface ErrorStructureProps {
-	field: string;
-	info: string;
+interface ErrorProps {
+	[key: string]: string[];
 }
 
 interface validateAdultDataProps {
 	(
 		adultData: AdultInfoProps[]
-	): ErrorStructureProps[];
+	): ErrorProps;
 }
 
 const validateAdultData: validateAdultDataProps = (adultData) => {
@@ -37,23 +36,29 @@ const validateAdultData: validateAdultDataProps = (adultData) => {
 		email: 12,
 		phone: 12,
 	};
-	// const adultErrors = new Set<number>();
-	const adultErrors: ErrorStructureProps[] = [];
-	
+	const adultErrors: ErrorProps = {};
+
 	for (let index = 0; index < adultData.length; index++) {
 		const adult = adultData[index];
-	
+
 		for (const property in propertiesToValidate) {
-			if (property in propertiesToValidate && 
-				adult[property as keyof AdultInfoProps].length <= propertiesToValidate[property]
-			) {
-				adultErrors.push({field: `${index}`, info: property});
-				break;
+			if (property in propertiesToValidate) {
+				const maxLength = propertiesToValidate[property];
+				const value = adult[property as keyof AdultInfoProps];
+				const field = `people${index}`;
+
+				if (value.length <= maxLength) {
+					if (!adultErrors[field]) {
+						adultErrors[field] = [property];
+					} else {
+						adultErrors[field].push(property);
+					}
+				}
 			}
 		}
 	}
-	
-	return Array.from(adultErrors);
+
+	return adultErrors;
 };
 
 interface setTimestampDateProps {
@@ -66,7 +71,6 @@ const setTimestampDate: setTimestampDateProps = (stringData) => {
 	const dateWitchHour = `${stringData} 14:00`;
 	const newDate = new Date(dateWitchHour);
 
-	console.log(newDate);
 	return newDate.getTime();
 };
 
@@ -78,12 +82,12 @@ interface validatePlacesDataProps {
 			startDate: number | null;
 			endDate: number | null;
 		}
-	): ErrorStructureProps[]
+	): ErrorProps
 }
 
 const validatePlacesData: validatePlacesDataProps = (placesData) => {
 	const { destiny, origin, endDate, startDate} = placesData;
-	const errors: ErrorStructureProps[] = [];
+	const errors: ErrorProps = {};
 	const today = new Date();
 	today.setHours(23, 59, 0, 0);
 	const todayTimestamp = today.getTime();
@@ -92,60 +96,69 @@ const validatePlacesData: validatePlacesDataProps = (placesData) => {
 	const validationRules = [
 		{
 			condition: !destiny.length,
-			field: 'Destino',
-			info: 'Selecione uma cidade de destino',
+			field: 'destiny',
+			info: 'selectDestiny',
 		},
 		{
 			condition: !origin,
-			field: 'Origem',
-			info: 'Selecione uma cidade de origem',
+			field: 'origin',
+			info: 'selectOrigin',
 		},
 		{
 			condition: origin && destiny && origin === destiny,
-			field: 'Destino',
-			info: 'Destino deve ser diferente da origem',
+			field: 'destiny',
+			info: 'otherDestiny',
 		},
 		{
 			condition: !startDate,
-			field: 'Saída',
-			info: 'Selecione uma data de saída.',
+			field: 'startDate',
+			info: 'selectStartDate',
 		},
 		{
 			condition: startDate && startDateValid <= todayTimestamp,
-			field: 'Saída',
-			info: 'Selecione uma data a partir de amanhã.',
+			field: 'startDate',
+			info: 'selectFutureDate',
 		},
 		{
 			condition: !endDate,
-			field: 'Volta',
-			info: 'Selecione uma data de volta.',
+			field: 'endDate',
+			info: 'selectEndDate',
 		},
 		{
 			condition: endDate && endDate <= todayTimestamp,
-			field: 'Volta',
-			info: 'Selecione uma data a partir de amanhã.',
+			field: 'endDate',
+			info: 'selectFutureDate',
 		},
 		{
 			condition: endDate && endDate <= startDateValid,
-			field: 'Volta',
-			info: 'A volta deve ser depois do dia da saída.',
+			field: 'endDate',
+			info: 'selectFutureEndDate',
 		},
 	];
 
 	validationRules.forEach(({condition, field, info}) => {
 		if (condition) {
-			errors.push({field: field, info: info});
+			if (!errors[field]) {
+				errors[field] = [info];
+			} else {
+				errors[field].push(info);
+			}
 		}
 	});
 
 	return errors;
 };
 
+interface ErrorArrayProps {
+	[0]: string;
+	[1]: string[];
+}
+
 interface validateFormDataProps {
 	(
 		event: MouseEvent<HTMLButtonElement>,
 		travelData: TravelFormData,
-		setHasError: React.Dispatch<React.SetStateAction<ErrorStructureProps[]>>,
+		setHasError: React.Dispatch<React.SetStateAction<ErrorArrayProps[]>>,
 		setIsValidForm: React.Dispatch<React.SetStateAction<boolean>>
 	): void;
 }
@@ -155,7 +168,6 @@ export const validateFormData:validateFormDataProps = (event, travelData, setHas
 	const { endDate, startDate } = placesInfo;
 	const initialDate = startDate ? setTimestampDate(startDate) : null;
 	const finalDate = endDate ? setTimestampDate(endDate) : null;
-	const errors:ErrorStructureProps[] = [];
 	const newPlacesInfo = {
 		...placesInfo,
 		startDate: initialDate,
@@ -163,24 +175,16 @@ export const validateFormData:validateFormDataProps = (event, travelData, setHas
 	};
 	const adultErrors = validateAdultData(adultInfo);
 	const placesErrors = validatePlacesData(newPlacesInfo);
+	let errors:ErrorProps = {};
 
 	// Depois remover "preventDefault" para fazer a validação dos campos e não redirecionar
 	event.preventDefault();
-	
-	if (adultErrors.length) {
-		for (let index = 0; index < adultErrors.length; index++) {
-			errors.push({ field: adultErrors[index].field, info: adultErrors[index].info });
-		}
-	}
-	if (placesErrors.length) {
-		for (let index = 0; index < placesErrors.length; index++) {
-			errors.push({ field: placesErrors[index].field, info: placesErrors[index].info});
-		}
-	}
 
-	console.log(errors);
-	if(!errors.length) {
+	errors = {...adultErrors, ...placesErrors};
+
+	if(!Object.keys(errors).length ) {
 		setIsValidForm(true);
 	}
-	setHasError(errors);
+
+	setHasError(Object.entries(errors));
 };

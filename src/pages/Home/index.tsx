@@ -1,11 +1,12 @@
-import { Fragment, MouseEvent, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import AdultDataInput from '../../components/Form/AdultDataInput';
 import TripDataInput from '../../components/Form/TripDataInput';
 import PassengerControl from '../../components/Form/PassengerControl';
-import { HomeContainer, PassengersContainer, ResumeContainer } from './styles';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { validateFormData } from '../../helpers/forms/validateForm';
+import terms from '../../helpers/terms';
+import { HomeContainer, PassengersContainer, ResumeContainer } from './styles';
 
 interface AdultInfoProps {
 	email: string;
@@ -35,9 +36,9 @@ interface updateLocationsDataProps {
 	data: PlacesInfoProps;
 }
 
-interface ErrorStructureProps {
-	field: string;
-	info: string;
+interface ErrorArrayProps {
+	[0]: string;
+	[1]: string[];
 }
 
 const defaultFormData = {
@@ -59,7 +60,7 @@ function Home() {
 	const [numberOfAdults, setNumberOfAdults] = useState<number>(1);
 	const [numberOfChildren, setNumberOfChildren] = useState<number>(0);
 	const [isValidForm, setIsValidForm] = useState<boolean>(false);
-	const [hasError, setHasError] = useState<ErrorStructureProps[]>([]);
+	const [hasError, setHasError] = useState<ErrorArrayProps[]>([]);
 	const [travelData, setTravelData] = useState<TravelFormData>(defaultFormData);
 	const updatePeopleData = ({data, index}: updatePeopleDataProps) => {
 		const { adultInfo, placesInfo } = travelData;
@@ -84,11 +85,6 @@ function Home() {
 
 	const handleSubmitForm = () => {
 		console.log('Foi');
-	};
-
-	const resetStatus = (event: MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		setIsValidForm(false);
 	};
 
 	useEffect(() => {
@@ -118,14 +114,22 @@ function Home() {
 					</PassengersContainer>
 					<ResumeContainer>
 						<TripDataInput updateLocationsData={updateLocationsData} />
-						<button className="validate-form" onClick={(e) => resetStatus(e)}>Resetar</button>
 						<button className="validate-form" onClick={(e) => validateFormData(e, travelData, setHasError, setIsValidForm)}>Validar os dados</button>
-						{hasError.map (({ field, info }, index) => (
-							<div key={index} className="error">
-								<p>{field}</p>
-								<span>{info}</span>
-							</div>
-						))}
+						{hasError.length > 0 && <h4 className='error-message'>Corrija os seguintes campos</h4>}
+						{hasError.map ((errorInfo, index) => {
+							const code = String(errorInfo[0]);
+
+							return (
+								<div key={index} className="error-container">
+									<p className="error-field">{terms[code]}</p>
+									<div className="error-info">
+										{ errorInfo[1].map ((error, index) => (
+											<p key={index}>{terms[error]}</p>
+										))}
+									</div>
+								</div>
+							);
+						})}
 					</ResumeContainer>
 				</HomeContainer>
 			</form>

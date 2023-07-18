@@ -51,6 +51,23 @@ export const HomeContainer = styled.div`
 		width: 100%;
 		margin-right: 10px;
 	}
+
+	.error-message {
+		color: #923;
+	}
+
+	.error-container {
+		display: flex;
+		justify-content: start;
+		color: #923;
+		
+		width: 100%;
+		padding: 0 10px;
+		
+		.error-field {
+			margin-right: 5px;
+		}
+	}
 `;
 
 export const PassengersContainer = styled.div`
