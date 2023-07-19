@@ -20,3 +20,15 @@ yarn dev
 Ao executar no seu próprio ambiente, o projeto ficará na porta:
 
 ```http://localhost:5173```
+
+
+## Comportamento da página
+
+Cadastro de dados
+
+![Screenshot](https://github.com/brunoamaia/travel-checkout-page/evidence/comportamento-pagina.gif?raw=true)
+
+
+Teste de alguns erros
+
+![Screenshot](https://github.com/brunoamaia/travel-checkout-page/evidence/teste-erros.gif?raw=true)

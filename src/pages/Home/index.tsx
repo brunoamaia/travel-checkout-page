@@ -208,12 +208,13 @@ function Home() {
 							})}
 						</ResumeContainer>
 					</div>
-					<div className="background">
-						<img src={backgroundImg} className="logo react" alt="Imagem de plano de fundo mostrando uma praia" />
-					</div>
+					
 				</HomeContainer>
 			</form>
 			<Footer/>
+			<div className="background">
+				<img src={backgroundImg} className="logo react" alt="Imagem de plano de fundo mostrando uma praia" />
+			</div>
 		</Fragment>
 	);
 }

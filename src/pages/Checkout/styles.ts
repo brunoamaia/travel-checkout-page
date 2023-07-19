@@ -7,7 +7,7 @@ export const CheckoutContainer = styled.div`
 	align-items: center;
 	width: 100%;
 	margin: 0 auto;
-	min-height: calc(100vh - 160px);
+	min-height: calc(100vh - 150px);
 
 	@media screen and (max-width: 1000px) {
 		max-width: 900px;

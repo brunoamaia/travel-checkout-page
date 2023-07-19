@@ -68,6 +68,7 @@ function TripDataInput({ updateLocationsData }: AdultFieldProps) {
 					type="date"
 					value={startDate}
 					onChange={(e) => setStartDate(e.target.value)}
+					required
 				/>
 			</div>
 			<div className="label-input">
@@ -77,6 +78,7 @@ function TripDataInput({ updateLocationsData }: AdultFieldProps) {
 					type="date"
 					value={endDate}
 					onChange={(e) => setEndDate(e.target.value)}
+					required
 				/>
 			</div>
 		</TripDataInputContainer>

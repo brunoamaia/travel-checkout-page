@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 export const HomeContainer = styled.div`
 	margin: 0 auto;
-	background-color: rgba(255, 255, 255, 0.5);
-	min-height: calc(100vh - 160px);
+	background-color: rgba(255, 255, 255, 0.4);
+	min-height: calc(100vh - 150px);
 
 	width: 100vw;
 	padding: 50px;
@@ -16,7 +16,7 @@ export const HomeContainer = styled.div`
 		margin: 0 auto;
 		border: 2px solid #333;
 		border-radius: 20px;
-		background-color: rgba(255, 255, 255, 0.3);
+		background-color: rgba(100, 130, 200, 0.6);
 	}
 
 	@media screen and (max-width: 450px) {
@@ -34,19 +34,11 @@ export const HomeContainer = styled.div`
 		.content {
 			max-width: 950px;
 		}
-
-		body {
-			overflow: hidden;
-		}
 	}
 
 	@media screen and (min-width: 1400px) {
 		.content {
 			max-width: 1300px;
-		}
-
-		body {
-			overflow: hidden;
 		}
 	}
 
@@ -97,36 +89,6 @@ export const HomeContainer = styled.div`
 		.error-field {
 			margin-right: 5px;
 		}
-	}
-
-	.background {
-		position: absolute;
-		top: 0;
-		left: 0;
-		z-index: -1;
-		object-fit: cover;
-
-		img {
-			width: 100%;
-			height: 100%;
-			object-fit: fill;
-
-			@media screen and (max-width: 600px) {
-				width: 250%;
-			}
-		}
-
-		@media screen and (max-width: 1400px) {
-			width: 150%;
-			max-height:700px;
-		}
-
-		@media screen and (max-width: 600px) {
-		.content {
-			flex-direction: column;
-			margin: 0;
-		}
-	}
 	}
 `;
 

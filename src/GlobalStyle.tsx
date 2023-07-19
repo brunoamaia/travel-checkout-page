@@ -13,6 +13,10 @@ export const GlobalStyle = createGlobalStyle`
 	body {
 		background-color: #bbb;
 		color: #29292E;
+
+		@media screen and (min-width: 1001px) {
+			overflow: hidden;
+		}
 	}
 
 	h1, h2, h3, h4, h5 {
@@ -44,6 +48,36 @@ export const GlobalStyle = createGlobalStyle`
 		background-color: #08852e;
 		cursor: pointer;
 		min-width: 100px;
+	}
+
+	.background {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: -1;
+		object-fit: cover;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: fill;
+
+			@media screen and (max-width: 600px) {
+				width: 250%;
+			}
+		}
+
+		@media screen and (max-width: 1400px) {
+			width: 150%;
+			max-height:700px;
+		}
+
+		@media screen and (max-width: 600px) {
+			.content {
+				flex-direction: column;
+				margin: 0;
+			}
+		}
 	}
 
 `;
