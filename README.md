@@ -26,9 +26,9 @@ Ao executar no seu próprio ambiente, o projeto ficará na porta:
 
 Cadastro de dados
 
-![Screenshot](https://github.com/brunoamaia/travel-checkout-page/evidence/comportamento-pagina.gif?raw=true)
+![Screenshot](https://raw.githubusercontent.com/brunoamaia/travel-checkout-page/main/evidence/comportamento-pagina.gif)
 
 
 Teste de alguns erros
 
-![Screenshot](https://github.com/brunoamaia/travel-checkout-page/evidence/teste-erros.gif?raw=true)
+![Screenshot](https://raw.githubusercontent.com/brunoamaia/travel-checkout-page/main/evidence/teste-erros.gif)
